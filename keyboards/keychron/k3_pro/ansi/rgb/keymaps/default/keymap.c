@@ -16,6 +16,10 @@
 
 #include QMK_KEYBOARD_H
 
+// pwd /home/andrew/keychron-qmk
+// make keychron/k3_pro/ansi/rgb:default
+// also changed matrix
+
 // clang-format off
 enum layers{
   MAC_BASE,
@@ -47,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS,            KC_PGDN,
      KC_CAPS,  KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,             KC_HOME,
      KC_LSFT,            KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,            KC_RSFT,  KC_UP,    KC_END,
-     KC_LCTL,  KC_LGUI,  KC_LALT,                                KC_SPC,                                 KC_RALT, MO(WIN_FN),KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT),
+     KC_LALT,  KC_LGUI,  KC_LCTL,                                KC_SPC,                                 KC_RALT, MO(WIN_FN),KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT),
 
 [WIN_FN] = LAYOUT_ansi_84(
      KC_TRNS,  KC_BRID,  KC_BRIU,  KC_TASK,  KC_FILE,  RGB_VAD,  RGB_VAI,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_TRNS,  RGB_TOG,
@@ -56,4 +60,82 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TRNS,  RGB_RMOD, RGB_VAD,  RGB_HUD,  RGB_SAD,  RGB_SPD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,            KC_TRNS,
      KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  BAT_LVL,  NK_TOGG,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,  KC_TRNS,
      KC_TRNS,  KC_TRNS,  KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS)
+};
+
+uint8_t mod_state;
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  mod_state = get_mods();
+
+  switch (keycode) {
+     case KC_I:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+               del_mods(MOD_LCTL);
+               tap_code(KC_UP);
+               set_mods(mod_state);
+               return false; 
+          }
+          
+          return true; 
+     case KC_K:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+               del_mods(MOD_LCTL);
+               tap_code(KC_DOWN);
+               set_mods(mod_state);
+               return false; 
+          }
+          
+          return true; 
+     case KC_J:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+               del_mods(MOD_LCTL);
+               tap_code(KC_LEFT);
+               set_mods(mod_state);
+               return false; 
+          }
+          
+          return true; 
+     case KC_L:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+               del_mods(MOD_LCTL);
+               tap_code(KC_RIGHT);
+               set_mods(mod_state);
+               return false; 
+          }
+          
+          return true; 
+     case KC_M:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+               del_mods(MOD_LCTL);
+               tap_code(KC_HOME);
+               set_mods(mod_state);  
+               return false; 
+          }
+          
+          return true; 
+     case KC_DOT:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+               del_mods(MOD_LCTL);
+               tap_code(KC_END);
+               set_mods(mod_state);
+               return false; 
+          }
+          
+          return true; 
+     case KC_U:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+               tap_code(KC_LEFT);
+               return false; 
+          }
+          
+          return true;
+     case KC_O:
+          if ((mod_state & MOD_LCTL) && record->event.pressed) {
+              tap_code(KC_RIGHT);
+               return false; 
+          }
+          
+          return true;
+     default:
+          return true; 
+  }
 };
